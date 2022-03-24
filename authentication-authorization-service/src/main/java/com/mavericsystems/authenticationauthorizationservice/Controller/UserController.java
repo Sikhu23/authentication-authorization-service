@@ -49,6 +49,7 @@ public class UserController {
              authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),
                      loginRequest.getPassword()));
         } catch (BadCredentialsException ex) {
+            System.out.println("I am here   ");
             throw new Exception(ConstFile.errorCode, ex);
         }
 
@@ -62,6 +63,7 @@ public class UserController {
         JWTRequest jwtRequest = new JWTRequest();
         jwtRequest.setEmail(userDto.getEmail());
         jwtRequest.setPassword(userDto.getPassword());
+
         authorisationRepo.save(jwtRequest);
         UserWithOutPassword userWithOutPassword = feignUser.createUser(userDto);
         final UserDetails userDetails = new User(userDto.getEmail(),userDto.getPassword(), new ArrayList<>());
