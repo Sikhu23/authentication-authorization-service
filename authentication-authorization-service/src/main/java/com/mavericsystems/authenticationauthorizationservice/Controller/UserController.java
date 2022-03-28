@@ -23,7 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-
+@CrossOrigin(value="*")
 @RestController
 @RequestMapping("/auth")
 public class UserController {
@@ -43,6 +43,7 @@ public class UserController {
     @Autowired
     AuthorisationRepo authorisationRepo;
 
+    @CrossOrigin(value = "*")
     @PostMapping("/login")
     public ResponseEntity<JWTResponse> login(@RequestBody LoginRequest loginRequest) throws Exception {
         try {
@@ -58,6 +59,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(new JWTResponse(token, feignUser.getUserDetailsByEmail(loginRequest.getEmail())));
     }
 
+    @CrossOrigin(value = "*")
     @PostMapping("/signup")
     public ResponseEntity<JWTResponse> signup(@RequestBody UserDto userDto) throws Exception {
         JWTRequest jwtRequest = new JWTRequest();

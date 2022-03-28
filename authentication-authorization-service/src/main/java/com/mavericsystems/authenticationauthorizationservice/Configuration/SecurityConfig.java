@@ -1,6 +1,7 @@
 package com.mavericsystems.authenticationauthorizationservice.Configuration;
 
 
+import com.google.common.collect.ImmutableList;
 import com.mavericsystems.authenticationauthorizationservice.Filter.JWTFilter;
 import com.mavericsystems.authenticationauthorizationservice.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+@CrossOrigin(value = "*")
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -51,10 +56,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers("/auth/signup").permitAll().
                 anyRequest().
                 authenticated().
+
                 and().
                 sessionManagement().
                 sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
+
 }

@@ -110,6 +110,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>dockerAuthService</finalName>
 	</build>
 
 </project>
