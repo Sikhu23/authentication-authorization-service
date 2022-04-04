@@ -1,4 +1,4 @@
-package com.mavericsystems.authenticationauthorizationservice.Model;
+package com.assessment.auth.Model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,4 +18,8 @@ public class JWTRequest {
     private String email;
     private String password;
 
+    public JWTRequest(String email, String password) {
+        this.email=email;
+        this.password=password;
+    }
 }

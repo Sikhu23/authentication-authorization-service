@@ -1,4 +1,4 @@
-package com.mavericsystems.authenticationauthorizationservice.Model;
+package com.assessment.auth.Model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,12 +9,14 @@ import org.springframework.data.annotation.Id;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.util.Date;
 
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 
-public class UserDto {
+public class UserWithOutPassword {
     @Id
     private String userID;
 
@@ -48,8 +50,6 @@ public class UserDto {
 
     @NotEmpty(message = "Email is required")
     private String email;
-    @NotEmpty(message = "Password is required")
-    private String password;
 
 
 

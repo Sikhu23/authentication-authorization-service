@@ -1,9 +1,10 @@
-package com.mavericsystems.authenticationauthorizationservice.Feign;
+package com.assessment.auth.Feign;
 
-import com.mavericsystems.authenticationauthorizationservice.Model.UserDto;
-import com.mavericsystems.authenticationauthorizationservice.Model.UserWithOutPassword;
+import com.assessment.auth.Model.UserDto;
+import com.assessment.auth.Model.UserWithOutPassword;
+
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public interface FeignUser {
     @PostMapping("/users")
     UserWithOutPassword createUser(UserDto userDto);
+
+
     @GetMapping("/users/getUserByEmail/{emailId}")
     UserWithOutPassword getUserDetailsByEmail(@PathVariable("emailId") String emailId);
 }

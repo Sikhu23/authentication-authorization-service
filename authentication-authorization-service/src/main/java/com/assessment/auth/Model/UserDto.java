@@ -1,21 +1,24 @@
-package com.mavericsystems.authenticationauthorizationservice.Model;
+package com.assessment.auth.Model;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.annotation.Id;
+
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
 import java.util.Date;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 
-public class UserWithOutPassword {
-    @Id
+public class UserDto {
+
     private String userID;
 
     @NotEmpty(message = "First name is required")
@@ -48,7 +51,8 @@ public class UserWithOutPassword {
 
     @NotEmpty(message = "Email is required")
     private String email;
-
+    @NotEmpty(message = "Password is required")
+    private String password;
 
 
 
