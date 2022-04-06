@@ -1,14 +1,19 @@
 package com.assessment.auth.Service;
 
 
+import com.assessment.auth.Exception.*;
 import com.assessment.auth.Feign.FeignUser;
+import com.assessment.auth.Model.AuthDTO;
 import com.assessment.auth.Model.JWTRequest;
 import com.assessment.auth.Model.UserDto;
 import com.assessment.auth.Model.UserWithOutPassword;
 import com.assessment.auth.Repository.AuthRepo;
 import com.assessment.auth.Util.JwtUtil;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 public class AuthService {
@@ -22,33 +27,62 @@ public class AuthService {
     @Autowired
     private AuthRepo authRepo;
 
-public UserWithOutPassword signup(UserDto userDto){
-    JWTRequest jwtRequest =new JWTRequest(userDto.getEmail(),userDto.getPassword());
-    authRepo.save(jwtRequest);
-
-    feignUser.createUser(userDto);
+public AuthDTO signup(UserDto userDto){
 
 
 
-    return new UserWithOutPassword(userDto.getUserID(),userDto.getFirstName(),userDto.getMiddleName(),
-            userDto.getLastName(),userDto.getPhoneNumber(),userDto.getDateOfBirth(),userDto.getGender(),userDto.getAddress(),
-            userDto.getEmployeeNumber(),userDto.getBloodGroup(),userDto.getEmail());
+    try{
+        feignUser.getUserDetailsByEmail(userDto.getEmail());
+        throw new EmailAlreadyExistsException("Email ALready Exists");
+
+
+    }
+
+    catch (FeignException e){
+
+
+        AuthDTO authDTO=new AuthDTO();
+        System.out.println(new BCryptPasswordEncoder().encode(userDto.getPassword()));
 
 
 
+        feignUser.createUser(userDto);
+        JWTRequest jwtRequest =new JWTRequest(userDto.getEmail(),new BCryptPasswordEncoder().encode(userDto.getPassword()));
+        authRepo.save(jwtRequest);
+        authDTO.setUser(feignUser.getUserDetailsByEmail(userDto.getEmail()));
+        authDTO.setToken(jwtUtil.generateToken(jwtRequest.getEmail()));
+
+        return  authDTO;
+
+
+//        return new UserWithOutPassword(userDto.getUserID(), userDto.getFirstName(), userDto.getMiddleName(),
+//                userDto.getLastName(), userDto.getPhoneNumber(), userDto.getDateOfBirth(), userDto.getGender(), userDto.getAddress(),
+//                userDto.getEmployeeNumber(), userDto.getBloodGroup(), userDto.getEmail());
+
+    }
 
 
 }
 
-public String login(JWTRequest jwtRequest){
+public AuthDTO login(JWTRequest jwtRequest){
     JWTRequest jwtRequest1 = authRepo.findByemail(jwtRequest.getEmail());
-    if(jwtRequest1.getPassword().equals(jwtRequest.getPassword())){
-        return jwtUtil.generateToken(jwtRequest.getEmail());
+    if(jwtRequest1==null){
+        throw new EmailNotExistException("Email Doesnot Exists");
+    }
+    if(new BCryptPasswordEncoder().matches(jwtRequest.getPassword(),jwtRequest1.getPassword())){
+
+            AuthDTO authDTO=new AuthDTO();
+            authDTO.setToken(jwtUtil.generateToken(jwtRequest.getEmail()));
+            authDTO.setUser(feignUser.getUserDetailsByEmail(jwtRequest.getEmail()));
+            return  authDTO;
+
+
 
     }
     else{
-        return "User not regsitered ";
+        throw new PasswordWrongException("Password doesnt match");
     }
+
 }
 
 

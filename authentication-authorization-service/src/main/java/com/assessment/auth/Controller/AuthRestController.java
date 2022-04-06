@@ -1,5 +1,6 @@
 package com.assessment.auth.Controller;
 
+import com.assessment.auth.Model.AuthDTO;
 import com.assessment.auth.Model.JWTRequest;
 import com.assessment.auth.Model.UserDto;
 import com.assessment.auth.Model.UserWithOutPassword;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.assessment.auth.Util.JwtUtil;
 
+import javax.validation.Valid;
+
 @RestController
 public class AuthRestController {
 
@@ -23,7 +26,7 @@ public class AuthRestController {
 	private AuthService authService;
 
 	@PostMapping("/auth/login")
-	public ResponseEntity<String> login(@RequestBody JWTRequest jwtRequest) {
+	public ResponseEntity<AuthDTO> login(@RequestBody JWTRequest jwtRequest) {
 
 
 
@@ -31,7 +34,7 @@ public class AuthRestController {
 	}
 
 	@PostMapping("/auth/signup")
-	public ResponseEntity<UserWithOutPassword> register(@RequestBody UserDto userDto) {
+	public ResponseEntity<AuthDTO> register(@Valid @RequestBody UserDto userDto) {
 
 
 		return new ResponseEntity<>(authService.signup(userDto), HttpStatus.OK);

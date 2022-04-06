@@ -44,6 +44,9 @@ public class JwtUtil {
 
 		return Jwts.builder().setClaims(claims).setIssuedAt(new Date(nowMillis)).setExpiration(exp)
 				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+//		return Jwts.builder().setClaims(claims).setSubject(id).setIssuedAt(new Date(System.currentTimeMillis()))
+//				.setExpiration(new Date(System.currentTimeMillis() + tokenValidity * 1000))
+//				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 	}
 
 	public void validateToken(final String token) throws JwtTokenMalformedException, JwtTokenMissingException {

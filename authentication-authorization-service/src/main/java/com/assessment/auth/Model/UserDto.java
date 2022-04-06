@@ -1,6 +1,8 @@
 package com.assessment.auth.Model;
 
 
+import com.assessment.auth.Enum.BloodGroup;
+import com.assessment.auth.Enum.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,8 +39,8 @@ public class UserDto {
     @NotNull(message = "Date of Birth is required")
     private Date dateOfBirth;
 
-    @NotEmpty(message = "Gender is required")
-    private String gender;
+    @NotNull(message = "Gender is required")
+    private Gender gender;
 
     @NotEmpty(message = "address is required")
     private String address ;
@@ -46,8 +48,8 @@ public class UserDto {
     @NotEmpty(message = "Employee Number is required")
     private String employeeNumber;
 
-    @NotEmpty(message = "Blood Group is required")
-    private String bloodGroup;
+    @NotNull(message = "Blood Group is required")
+    private BloodGroup bloodGroup;
 
     @NotEmpty(message = "Email is required")
     private String email;
