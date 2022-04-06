@@ -1,6 +1,7 @@
 package com.assessment.auth.Service;
 
 
+import com.assessment.auth.Enum.BloodGroup;
 import com.assessment.auth.Exception.*;
 import com.assessment.auth.Feign.FeignUser;
 import com.assessment.auth.Model.AuthDTO;
@@ -29,30 +30,39 @@ public class AuthService {
 
 public AuthDTO signup(UserDto userDto){
 
+    boolean flag=false;
+    String bg = userDto.getBloodGroup();
+    BloodGroup[] bgs= BloodGroup.values();
+    for(BloodGroup bloodGroup:bgs){
+        if(String.valueOf(bloodGroup.getGroup()).equals(bg)){
+            flag=true;
+            break;
+
+        }
+    }
+
+if(flag) {
 
 
-    try{
+    try {
         feignUser.getUserDetailsByEmail(userDto.getEmail());
         throw new EmailAlreadyExistsException("Email ALready Exists");
 
 
-    }
-
-    catch (FeignException e){
+    } catch (FeignException e) {
 
 
-        AuthDTO authDTO=new AuthDTO();
+        AuthDTO authDTO = new AuthDTO();
         System.out.println(new BCryptPasswordEncoder().encode(userDto.getPassword()));
 
 
-
         feignUser.createUser(userDto);
-        JWTRequest jwtRequest =new JWTRequest(userDto.getEmail(),new BCryptPasswordEncoder().encode(userDto.getPassword()));
+        JWTRequest jwtRequest = new JWTRequest(userDto.getEmail(), new BCryptPasswordEncoder().encode(userDto.getPassword()));
         authRepo.save(jwtRequest);
         authDTO.setUser(feignUser.getUserDetailsByEmail(userDto.getEmail()));
         authDTO.setToken(jwtUtil.generateToken(jwtRequest.getEmail()));
 
-        return  authDTO;
+        return authDTO;
 
 
 //        return new UserWithOutPassword(userDto.getUserID(), userDto.getFirstName(), userDto.getMiddleName(),
@@ -60,9 +70,13 @@ public AuthDTO signup(UserDto userDto){
 //                userDto.getEmployeeNumber(), userDto.getBloodGroup(), userDto.getEmail());
 
     }
-
-
 }
+else{
+    throw new EnumException("Blood Group is Enum and cant have value as "+userDto.getBloodGroup() );
+    }
+}
+
+
 
 public AuthDTO login(JWTRequest jwtRequest){
     JWTRequest jwtRequest1 = authRepo.findByemail(jwtRequest.getEmail());

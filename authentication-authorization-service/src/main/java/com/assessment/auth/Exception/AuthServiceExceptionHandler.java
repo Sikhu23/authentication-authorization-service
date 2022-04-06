@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 class AuthServiceExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({EmailAlreadyExistsException.class,VariableNotValidException.class,EmailNotExistException.class
-    ,PasswordWrongException.class})
+    ,PasswordWrongException.class,EnumException.class})
     ResponseEntity customerNotFoundHandler(Exception exception, ServletWebRequest request){
         ApiError apiError = new ApiError();
         apiError.setMessage(exception.getMessage());
