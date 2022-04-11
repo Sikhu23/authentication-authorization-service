@@ -3,6 +3,7 @@ package com.assessment.auth.Model;
 
 import com.assessment.auth.Enum.BloodGroup;
 import com.assessment.auth.Enum.Gender;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -37,6 +39,7 @@ public class UserDto {
     private String phoneNumber;
 
     @NotNull(message = "Date of Birth is required")
+
     private Date dateOfBirth;
 
     @NotNull(message = "Gender is required")
@@ -52,6 +55,8 @@ public class UserDto {
     private String bloodGroup;
 
     @NotEmpty(message = "Email is required")
+    @Pattern(regexp = "^[\\wA-Za-z0-9]+(?:\\.[\\wA-Za-z0-9+_-]+[A-Za-z0-9]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$",
+            message = " enter correct email")
     private String email;
     @NotEmpty(message = "Password is required")
     private String password;
